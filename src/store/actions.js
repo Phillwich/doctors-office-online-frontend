@@ -55,11 +55,13 @@ export default {
   registerSurgery: async ({ commit }, surgery) => {
     try {
       const response = await postRequest('http://localhost:3000/surgery', surgery, store.state.userToken)
+      console.log(response)
       return {
         success: true,
         data: response.data
       }
     } catch (error) {
+      console.log(error)
       return {
         success: false
       }

@@ -19,6 +19,11 @@
         </v-card>
       </v-col>
     </v-row>
+    <v-row justify="center">
+      <v-col cols="12" xl="6">
+
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
@@ -34,14 +39,14 @@ export default {
     const surgeryId = this.$route.params.id;
     const response = await this.getSurgeryInformation(surgeryId);
 
-    if (!response.success) return this.$router.push('/login')
-    
+    if (!response.success) return this.$router.push("/login");
+
     this.surgery = response.data;
   },
   methods: {
     ...mapActions(["getSurgeryInformation"]),
     formatCity(surgery) {
-      return `${surgery.plz} ${surgery.city}`
+      return `${surgery.plz} ${surgery.city}`;
     }
   }
 };

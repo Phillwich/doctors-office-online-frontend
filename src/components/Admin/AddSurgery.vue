@@ -43,7 +43,8 @@ export default {
           plz: this.plz,
           city: this.city,
           phone: this.phone,
-          email: this.phone
+          email: this.phone,
+          appointments: []
         }
       })
     }
