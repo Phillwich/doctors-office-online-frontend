@@ -1,15 +1,13 @@
 import axios from "axios"
-import * as config from "config"
 
-const BASE_URL = config.get("BACKEND_URL")
-
+import { BACKEND_URL } from "../../config/default"
 import { getRequest, deleteRequest, postRequest } from "../utils/axios"
 import store from "../store"
 
 export default {
   register: async ({ Commit }, user) => {
     try {
-      const response = await axios.post(`${BASE_URL}/register`, user)
+      const response = await axios.post(`${BACKEND_URL}/register`, user)
       return {
         success: true, 
         data: response.data.data
@@ -23,7 +21,7 @@ export default {
 
   login: async ({ commit }, userData) => {
     try {
-      const response = await axios.post(`${BASE_URL}/login`, userData)
+      const response = await axios.post(`${BACKEND_URL}/login`, userData)
       sessionStorage.setItem('token', response.data.data.token)
       sessionStorage.setItem('userId', response.data.data.user._id)
       commit('setUserToken', response.data.data.token)
@@ -43,7 +41,7 @@ export default {
 
   getUserInformation: async ({ commit }, userId) => {
     try {
-      const response = await getRequest(`${BASE_URL}/user/${userId}`, store.state.userToken)
+      const response = await getRequest(`${BACKEND_URL}/user/${userId}`, store.state.userToken)
       return {
         success: true, 
         data: response.data
@@ -57,7 +55,7 @@ export default {
 
   registerSurgery: async ({ commit }, surgery) => {
     try {
-      const response = await postRequest(`${BASE_URL}/surgery`, surgery, store.state.userToken)
+      const response = await postRequest(`${BACKEND_URL}/surgery`, surgery, store.state.userToken)
       console.log(response)
       return {
         success: true,
@@ -73,7 +71,7 @@ export default {
 
   getSurgeries: async ({ commit }) => {
     try {
-      const response = await axios.get(`${BASE_URL}/surgery`)
+      const response = await axios.get(`${BACKEND_URL}/surgery`)
       return {
         success: true,
         data: response.data.data
@@ -87,7 +85,7 @@ export default {
 
   getSurgeryInformation: async ({ commit }, surgerId) => {
     try {
-      const response = await getRequest(`${BASE_URL}/surgery/${surgerId}`, store.state.userToken)
+      const response = await getRequest(`${BACKEND_URL}/surgery/${surgerId}`, store.state.userToken)
       return {
         success: true,
         data: response.data
@@ -101,7 +99,7 @@ export default {
 
   deleteSurgery: async ({ commit }, surgerId) => {
     try {
-      const response = await deleteRequest(`${BASE_URL}/surgery/${surgerId}`)
+      const response = await deleteRequest(`${BACKEND_URL}/surgery/${surgerId}`)
       return {
         success: true
       }
