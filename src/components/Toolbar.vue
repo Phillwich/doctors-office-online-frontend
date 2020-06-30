@@ -17,7 +17,7 @@
           </v-btn>
         </template>
 
-        <v-list>
+        <v-list heigth="100">
           <v-list-item @click="pushRoute('/user')">
             <v-list-item-icon>
               <v-icon>mdi-account</v-icon>
@@ -76,6 +76,7 @@ export default {
       this.removeUserToken()
       sessionStorage.removeItem('token')
       sessionStorage.removeItem('userId')
+      sessionStorage.removeItem('isAdmin')
       this.pushRoute("/");
     }
   },

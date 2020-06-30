@@ -8,7 +8,7 @@
           </v-card-title>
           <v-card-text>
             <v-text-field v-model="email" label="Email" outlined></v-text-field>
-            <v-text-field v-model="password" label="Password" outlined></v-text-field>
+            <v-text-field v-model="password" type="password" label="Password" outlined></v-text-field>
             <v-row justify="end">
               <span @click="routerPush" id="register_button"> Noch nicht registriert? Jetzt Registrieren! </span>
             </v-row>

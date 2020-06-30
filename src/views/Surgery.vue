@@ -12,7 +12,7 @@
                 </v-col>
                 <v-col cols="12" xl="6" lg="6">
                   <v-text-field outlined disabled :value="formatCity(item)"></v-text-field>
-                  <v-text-field id="text" outlined disabled v-model="item.phone"></v-text-field>
+                  <v-text-field outlined disabled v-model="item.phone"></v-text-field>
                   <v-text-field outlined disabled v-model="item.email"></v-text-field>
                 </v-col>
               </v-row>

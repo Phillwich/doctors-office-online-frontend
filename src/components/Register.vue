@@ -17,8 +17,8 @@
                   <v-text-field outlined v-model="firstname" label="Vorname"></v-text-field>
                   <v-text-field outlined v-model="lastname" label="Nachname"></v-text-field>
                   <v-text-field outlined v-model="email" label="Email"></v-text-field>
-                  <v-text-field outlined v-model="password" label="Password"></v-text-field>
-                  <v-text-field outlined label="Password Check"></v-text-field>
+                  <v-text-field outlined v-model="password" type="password" label="Password"></v-text-field>
+                  <v-text-field outlined type="password" v-model="passwordTest" label="Password Check"></v-text-field>
                 </v-card-text>
 
                 <v-card-actions>
@@ -39,14 +39,20 @@
 export default {
   data: () => {
     return {
-      firstname: '',
-      lastname: '',
-      email: '',
-      password: ''
+      firstname: null,
+      lastname: null,
+      email: null,
+      password: null,
+      passwordTest: null
     }
   },
   methods: {
     register() {
+      if (this.password !== this.passwordTest) {
+        this.password = null
+        this.passwordTest = null
+        return alert('Passwörter stimmen nicht über ein')
+      }
       this.$emit('registerUser', {
         user: {
           firstName: this.firstname,
