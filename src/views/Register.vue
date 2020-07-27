@@ -3,8 +3,9 @@
 </template>
 
 <script>
-import Register from '../components/Register'
 import { mapActions } from 'vuex'
+
+import Register from '../components/Register'
 
 export default {
   components: {
@@ -12,9 +13,14 @@ export default {
   },
   methods: {
     ...mapActions(['register']),
+
     async registerUser(user) {
-      const response = await this.register(user)
-      if (response) this.$router.push('/login')
+      try {
+        const response = await this.register(user)
+        this.$router.push('/login')
+      } catch (error) {
+        window.alert('Da ist etwas schief gegangen. Bitte versuche es erneut!')
+      }
     }
   },
 }

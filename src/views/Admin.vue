@@ -20,7 +20,6 @@
               <ListSurgery />
             </v-tab-item>
           </v-tabs-items>
-          
         </v-card>
       </v-col>
     </v-row>
@@ -31,7 +30,7 @@
 import { mapActions } from "vuex";
 
 import AddSurgery from "../components/Admin/AddSurgery";
-import ListSurgery from "../components/Admin/ListSurgery"
+import ListSurgery from "../components/Admin/ListSurgery";
 
 export default {
   data() {
@@ -46,7 +45,12 @@ export default {
   methods: {
     ...mapActions(["registerSurgery"]),
     async addSurgery(surgery) {
-      const response = await this.registerSurgery(surgery);
+      try {
+        await this.registerSurgery(surgery);
+        this.tab = "tab-2";
+      } catch (error) {
+        this.$router.push("/login");
+      }
     }
   }
 };

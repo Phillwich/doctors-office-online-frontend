@@ -13,9 +13,14 @@ export default {
   methods: {
     ...mapActions(['login']),
     async userLogin(userData) {
+      try {
       const response = await this.login(userData)
-
-      if (response.success) this.$router.push(`/user/${response.data.user._id}`)
+      this.$router.push(`/surgery`)
+      } catch (error) {
+        if (this.$route.path !== '/login') {
+          this.$router.push('/login')
+        }
+      }
     }
   }
 }

@@ -37,6 +37,15 @@
         </v-list-item-content>
       </v-list-item>
 
+      <v-list-item link @click="pushRoute('/admin')" v-if="userToken && isAdmin">
+        <v-list-item-icon>
+          <v-icon>mdi-account-key</v-icon>
+        </v-list-item-icon>
+        <v-list-item-content>
+          <v-list-item-title>Admin</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+
       <v-list-item link @click="logout()" v-if="userToken">
         <v-list-item-icon>
           <v-icon>mdi-logout</v-icon>
@@ -60,21 +69,22 @@ export default {
     };
   },
   computed: {
-    ...mapState(["userToken", 'userId'])
+    ...mapState(["userToken", "userId", "isAdmin"])
   },
   methods: {
-    ...mapMutations(['removeUserToken']),
+    ...mapMutations(["resetUser"]),
     pushRoute(route) {
-      if (route === '/user' && this.userId !== null) route = `${route}/${this.userId}`
+      if (this.$route.path === route) return;
+
+      if (route === "/user" && this.userId !== null)
+        route = `${route}/${this.userId}`;
+
+      if (this.$route.path === route) return
       this.$emit("push", route);
     },
     logout() {
-      this.removeIsAdmin()
-      this.removeUserToken()
-      sessionStorage.removeItem('token')
-      sessionStorage.removeItem('userId')
-      sessionStorage.removeItem('isAdmin')
-      this.pushRoute('/')
+      this.resetUser();
+      this.pushRoute("/");
     }
   },
   watch: {

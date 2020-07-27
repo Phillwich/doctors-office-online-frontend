@@ -1,17 +1,18 @@
 export default {
-  setUserToken(state, token) {
-    state.userToken = token
+  setUser(state, user) {
+    this.state.userId = user.userId
+    this.state.userToken = user.userToken
+    this.state.isAdmin = user.isAdmin
+    sessionStorage.setItem('token', user.userToken)
+    sessionStorage.setItem('userId', user.userId)
+    sessionStorage.setItem('isAdmin', user.isAdmin)
   },
-  removeUserToken(state) {
+  resetUser(state) {
+    this.state.userId = null
     this.state.userToken = null
-  },
-  setIsAdmin(state) {
-    this.state.isAdmin = true
-  },
-  removeIsAdmin(state) {
     this.state.isAdmin = false
-  },
-  setUserId(state, id) {
-    this.state.userId = id
+    sessionStorage.removeItem('token')
+    sessionStorage.removeItem('userId')
+    sessionStorage.removeItem('isAdmin')
   }
 }
