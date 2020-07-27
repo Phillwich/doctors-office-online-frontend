@@ -21,7 +21,7 @@
             <v-textarea outlined v-model="description"></v-textarea>
           </v-card-text>
           <v-card-actions>
-            <v-btn @click="checkAppointment" :disabeld="!valid">Termin vereinbaren</v-btn>
+            <v-btn @click="checkAppointment" :disabled="!valid">Termin vereinbaren</v-btn>
           </v-card-actions>
         </v-card>
         <v-dialog v-model="dialog" width="35%">
