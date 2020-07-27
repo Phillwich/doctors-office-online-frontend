@@ -35,7 +35,7 @@ export default {
       const response = await getRequest(`${BACKEND_URL}/user/${userId}`, store.state.userToken)
 
       if (!response.authorized) {
-        commit("reset")
+        commit("resetUser")
         throw new Error("Unauthorized")
       }
 
@@ -50,7 +50,7 @@ export default {
       const response = await postRequest(`${BACKEND_URL}/surgery`, surgery, store.state.userToken)
       
       if (!response.authorized) {
-        commit("reset")
+        commit("resetUser")
         throw new Error("Unauthorized")
       }
 
@@ -74,7 +74,7 @@ export default {
       const response = await getRequest(`${BACKEND_URL}/surgery/${surgerId}`, store.state.userToken)
 
       if (!response.authorized) {
-        commit("reset")
+        commit("resetUser")
         throw new Error("Unauthorized")
       }
 
@@ -87,7 +87,7 @@ export default {
   deleteUser: async ({ commit }, userId) => {
     try {
       await deleteRequest(`${BACKEND_URL}/user/${userId}`, store.state.userToken)
-      commit("resetUser")
+      commit("resetUserUser")
     } catch (error) {
       throw new Error(error.message)
     }
@@ -98,7 +98,7 @@ export default {
       const response = await putRequest(`${BACKEND_URL}/user`, user, store.state.userToken)
 
       if (!response.authorized) {
-        commit("reset")
+        commit("resetUser")
         throw new Error("Unauthorized")
       }
 
@@ -112,7 +112,7 @@ export default {
       const response = await putRequest(`${BACKEND_URL}/surgery`, surgery, store.state.userToken)
 
       if (!response.authorized) {
-        commit("reset")
+        commit("resetUser")
         throw new Error("Unauthorized")
       }
 
@@ -126,7 +126,7 @@ export default {
       const response = await postRequest(`${BACKEND_URL}/appointment`, appointment, store.state.userToken) 
 
       if (!response.authorized) {
-        commit("reset")
+        commit("resetUser")
         throw new Error("Unauthorized")
       }
 
@@ -139,7 +139,7 @@ export default {
     try {
       const response = await getRequest(`${BACKEND_URL}/appointment/${userId}`, store.state.userToken)
       if (!response.authorized) {
-        commit("reset")
+        commit("resetUser")
         throw new Error("Unauthorized")
       }
 
@@ -154,7 +154,7 @@ export default {
       const response = await deleteRequest(`${BACKEND_URL}/appointment/${appointmentId}`, store.state.userToken)
 
       if (!response.authorized) {
-        commit("reset")
+        commit("resetUser")
         throw new Error("Unauthorized")
       }
 
