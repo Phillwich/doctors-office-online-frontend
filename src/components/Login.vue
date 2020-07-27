@@ -7,15 +7,20 @@
             <v-row justify="center">Login</v-row>
           </v-card-title>
           <v-card-text>
-            <v-text-field v-model="email" label="Email" outlined></v-text-field>
-            <v-text-field v-model="password" label="Password" outlined></v-text-field>
+            <v-form v-model="valid">
+              <v-text-field v-model="email" :rules="emailRules" required label="Email" outlined></v-text-field>
+              <v-text-field v-model="password" :rules="nameRules" required type="password" label="Passwort" outlined></v-text-field>
+            </v-form>
             <v-row justify="end">
-              <span @click="routerPush" id="register_button"> Noch nicht registriert? Jetzt Registrieren! </span>
+              <span
+                @click="routerPush"
+                id="register_button"
+              >Noch nicht registriert? Jetzt Registrieren!</span>
             </v-row>
           </v-card-text>
           <v-card-actions>
             <v-row justify="space-around">
-              <v-btn color="grey" @click="loginUser">Login</v-btn>
+              <v-btn color="grey" @click="loginUser" :disabled="!valid">Login</v-btn>
               <!-- <v-btn color="grey" @click="routerPush">Jetzt registrieren</v-btn> -->
             </v-row>
           </v-card-actions>
@@ -29,8 +34,16 @@
 export default {
   data() {
     return {
+      valid: false,
       email: null,
-      password: null
+      password: null,
+      emailRules: [
+        v => !!v || 'Bitte geben Sie eine Email an',
+        v => /.+@.+/.test(v) || 'Bitte geben Sie eine gültige Email Adresse ein',
+      ],
+      nameRules: [
+        v => !!v || 'Bitte geben Sie einen Name ein',
+      ],
     };
   },
   methods: {
@@ -43,7 +56,7 @@ export default {
       });
     },
     routerPush() {
-      return this.$router.push('/register')
+      return this.$router.push("/register");
     }
   }
 };

@@ -6,18 +6,21 @@
         <v-card-text>
           <v-row justify="center" align="center">
             <v-col>
-              <v-textarea outlined disabled v-model="item.description"></v-textarea>
+              <v-textarea outlined :disabled="edit" v-model="item.description"></v-textarea>
             </v-col>
             <v-col cols="12" xl="6" lg="6">
               <v-text-field outlined disabled :value="formatCity(item)"></v-text-field>
-              <v-text-field outlined disabled v-model="item.phone"></v-text-field>
-              <v-text-field outlined disabled v-model="item.email"></v-text-field>
+              <v-text-field outlined :disabled="edit" v-model="item.phone"></v-text-field>
+              <v-text-field outlined :disabled="edit" v-model="item.email"></v-text-field>
             </v-col>
           </v-row>
           <v-card-actions>
-            <v-row justify="space-around">
-              <v-btn>Bearbeiten</v-btn>
-              <v-btn color="red" @click="surgeryDelete(item)">Löschen</v-btn>
+            <v-row v-if="edit" justify="space-around">
+              <v-btn @click="edit = !edit">Bearbeiten</v-btn>
+            </v-row>
+            <v-row v-if="!edit" justify="space-around">
+              <v-btn @click="update(item)" color="green">Speichern</v-btn>
+              <v-btn @click="edit = !edit">Abbrechen</v-btn>
             </v-row>
           </v-card-actions>
         </v-card-text>
@@ -33,24 +36,28 @@ import { mapActions } from "vuex";
 export default {
   data() {
     return {
-      surgeries: []
+      surgeries: [],
+      edit: true
     };
   },
   methods: {
-    ...mapActions(["getSurgeries", "deleteSurgery"]),
+    ...mapActions(["getSurgeries", "updateSurgery"]),
     formatCity(item) {
       return `${item.plz} ${item.city}`;
     },
-    async surgeryDelete(surgery) {
-      const response = await this.deleteSurgery(surgery._id);
-
-      if (response.success) {
-        await this.getAllSurgeries();
+    async getAllSurgeries() {
+      try {
+        const response = await this.getSurgeries();
+        this.surgeries = response;
+      } catch (error) {
+        this.$router.push('/login')
       }
     },
-    async getAllSurgeries() {
-      const response = await this.getSurgeries();
-      this.surgeries = response.data;
+    async update(data) {
+      this.edit = true;
+      const response = await this.updateSurgery({
+        surgery: data
+      });
     }
   },
   async mounted() {

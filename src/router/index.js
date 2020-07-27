@@ -15,7 +15,6 @@ const checkSession = (to, from, next) => {
   if (to.name === 'Admin') {
     if (!store.state.isAdmin) next({ name: Login })
   }
-
   if (!store.state.userToken) {
     next({ name: 'Login' })
   }

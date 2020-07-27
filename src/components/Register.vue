@@ -12,18 +12,19 @@
                 <v-card-title>
                   <v-row justify="center">Registrierung</v-row>
                 </v-card-title>
-
-                <v-card-text>
-                  <v-text-field outlined v-model="firstname" label="Vorname"></v-text-field>
-                  <v-text-field outlined v-model="lastname" label="Nachname"></v-text-field>
-                  <v-text-field outlined v-model="email" label="Email"></v-text-field>
-                  <v-text-field outlined v-model="password" label="Password"></v-text-field>
-                  <v-text-field outlined label="Password Check"></v-text-field>
+                <v-form ref="form" v-model="valid">
+                <v-card-text >
+                  <v-text-field outlined required :rules="nameRules" v-model="firstname" label="Vorname"></v-text-field>
+                  <v-text-field outlined required :rules="nameRules" v-model="lastname" label="Nachname"></v-text-field>
+                  <v-text-field outlined required :rules="emailRules" v-model="email" label="Email"></v-text-field>
+                  <v-text-field outlined required :rules="passwordRules" v-model="password" type="password" label="Passwort"></v-text-field>
+                  <v-text-field outlined required :rules="passwordRules" type="password" v-model="passwordTest" label="Passwort Überprüfung"></v-text-field>
                 </v-card-text>
+                </v-form>
 
                 <v-card-actions>
                   <v-row justify="center">
-                    <v-btn color="grey" @click="register">Registrieren</v-btn>
+                    <v-btn color="grey" :disabled="!valid" @click="register">Registrieren</v-btn>
                   </v-row>
                 </v-card-actions>
               </v-card>
@@ -39,14 +40,32 @@
 export default {
   data: () => {
     return {
-      firstname: '',
-      lastname: '',
-      email: '',
-      password: ''
+      valid: false, 
+      firstname: null,
+      lastname: null,
+      email: null,
+      password: null,
+      passwordTest: null,
+      emailRules: [
+        v => !!v || 'Bitte geben Sie eine Email an',
+        v => /.+@.+/.test(v) || 'Bitte geben Sie eine gültige Email Adresse ein',
+      ],
+      nameRules: [
+        v => !!v || 'Bitte geben Sie einen Name ein',
+      ],
+      passwordRules: [
+        v => !!v || 'Bitte geben Sie ein Passwort an',
+      ]
     }
   },
   methods: {
     register() {
+      if (this.password !== this.passwordTest) {
+        this.password = null
+        this.passwordTest = null
+        return alert('Passwörter stimmen nicht über ein')
+      }
+      
       this.$emit('registerUser', {
         user: {
           firstName: this.firstname,

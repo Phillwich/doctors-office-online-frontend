@@ -5,13 +5,13 @@
         <v-card flat>
           <v-card-title>
             <v-row justify="end">
-              <v-col cols="12" xl="6" lg="6" md="6">
+              <v-col cols="12" xl="8" lg="6" md="6">
                 <v-row align="center" justify="center">
                   <span>Sei frei und unabhängig!</span>
                 </v-row>
                 <br />
                 <p>
-                  Entscheide selber wann du deinen nächste Arzttermin ausmachst.
+                  Entscheide selber wann du deinen nächsten Arzttermin ausmachst.
                   <br />Ganz bequem - zu jeder Zeit, von überall.
                 </p>
               </v-col>
@@ -31,8 +31,10 @@
 export default {
   name: "Home",
   methods: {
-    pushRoute(value) {
-      this.$router.push(value)
+    pushRoute(route) {
+      if (this.$route.path === route) return
+      
+      this.$router.push(route)
     }
   },
 };

@@ -17,7 +17,7 @@
           </v-btn>
         </template>
 
-        <v-list>
+        <v-list heigth="100">
           <v-list-item @click="pushRoute('/user')">
             <v-list-item-icon>
               <v-icon>mdi-account</v-icon>
@@ -63,19 +63,21 @@ export default {
     ...mapState(["userToken", "isAdmin", "userId"])
   },
   methods: {
-    ...mapMutations(["removeUserToken", "removeIsAdmin"]),
+    ...mapMutations(["resetUser"]),
     openNavigationBar() {
       this.$emit("open-NavigationBar", !this.navigationDrawer);
     },
     pushRoute(route) {
+      if (this.$route.path === route) return
+
       if (route === '/user' && this.userId !== null) route = `${route}/${this.userId}`
+
+      if (this.$route.path === route) return 
+
       this.$emit("push", route);
     },
     logout() {
-      this.removeIsAdmin()
-      this.removeUserToken()
-      sessionStorage.removeItem('token')
-      sessionStorage.removeItem('userId')
+      this.resetUser()
       this.pushRoute("/");
     }
   },

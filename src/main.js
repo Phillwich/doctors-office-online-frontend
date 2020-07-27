@@ -11,7 +11,6 @@ import VueCookies from 'vue-cookies'
 Vue.config.productionTip = false
 
 new Vue({
-  VueCookies,
   router,
   store,
   vuetify,

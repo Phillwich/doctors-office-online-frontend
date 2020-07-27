@@ -1,111 +1,165 @@
 import axios from "axios"
 
-import { getRequest, deleteRequest, postRequest } from "../utils/axios"
+import { BACKEND_URL } from "../../config/default"
+import { getRequest, deleteRequest, postRequest, putRequest } from "../utils/axios"
 import store from "../store"
+
 
 export default {
   register: async ({ Commit }, user) => {
     try {
-      const response = await axios.post('http://localhost:3000/register', user)
-      return {
-        success: true, 
-        data: response.data.data
-      }
+      const response = await postRequest(`${BACKEND_URL}/register`, user)
     } catch (error) {
-      return {
-        success: false
-      }
+      throw new Error(error.message)
     }
   },
 
   login: async ({ commit }, userData) => {
     try {
-      const response = await axios.post('http://localhost:3000/login', userData)
-      sessionStorage.setItem('token', response.data.data.token)
-      sessionStorage.setItem('userId', response.data.data.user._id)
-      commit('setUserToken', response.data.data.token)
-      commit('setUserId', response.data.data.user._id)
-      if (response.data.data.user.isAdmin) commit('setIsAdmin')
-      return {
-        success: true,
-        data: response.data.data
-      }
+      const response = await postRequest(`${BACKEND_URL}/login`, userData)
+      
+      commit('setUser', {
+        userId: response.data.data.user._id,
+        userToken: response.data.data.token,
+        isAdmin: response.data.data.user.isAdmin
+      })
+    
+      return response.data
     } catch (error) {
-      console.log(error)
-      return {
-        success: false
-      }
+      throw new Error(error.message)
     }
   },
 
   getUserInformation: async ({ commit }, userId) => {
     try {
-      const response = await getRequest(`http://localhost:3000/user/${userId}`, store.state.userToken)
-      return {
-        success: true, 
-        data: response.data
+      const response = await getRequest(`${BACKEND_URL}/user/${userId}`, store.state.userToken)
+
+      if (!response.authorized) {
+        commit("reset")
+        throw new Error("Unauthorized")
       }
+
+      return response.data.data
     } catch (error) {
-      return {
-        success: false
-      }
+      throw new Error(error.message)
     }
   },
 
   registerSurgery: async ({ commit }, surgery) => {
     try {
-      const response = await postRequest('http://localhost:3000/surgery', surgery, store.state.userToken)
-      console.log(response)
-      return {
-        success: true,
-        data: response.data
+      const response = await postRequest(`${BACKEND_URL}/surgery`, surgery, store.state.userToken)
+      
+      if (!response.authorized) {
+        commit("reset")
+        throw new Error("Unauthorized")
       }
+
+      return response.data.data
     } catch (error) {
-      console.log(error)
-      return {
-        success: false
-      }
+      throw new Error(error.message)
     }
   },
 
   getSurgeries: async ({ commit }) => {
     try {
-      const response = await axios.get('http://localhost:3000/surgery')
-      return {
-        success: true,
-        data: response.data.data
-      }
+      const response = await axios.get(`${BACKEND_URL}/surgery`)
+      return response.data.data
     } catch (error) {
-      return {
-        success: false
-      }
+      throw new Error(error.message)
     }
   },
 
   getSurgeryInformation: async ({ commit }, surgerId) => {
     try {
-      const response = await getRequest(`http://localhost:3000/surgery/${surgerId}`, store.state.userToken)
-      return {
-        success: true,
-        data: response.data
+      const response = await getRequest(`${BACKEND_URL}/surgery/${surgerId}`, store.state.userToken)
+
+      if (!response.authorized) {
+        commit("reset")
+        throw new Error("Unauthorized")
       }
+
+      return response.data.data
     } catch (error) {
-      return {
-        success: false
-      }
+      throw new Error(error.message)
     }
   },
 
-  deleteSurgery: async ({ commit }, surgerId) => {
+  deleteUser: async ({ commit }, userId) => {
     try {
-      const response = await deleteRequest(`http://localhost:3000/surgery/${surgerId}`)
-      return {
-        success: true
-      }
+      await deleteRequest(`${BACKEND_URL}/user/${userId}`, store.state.userToken)
+      commit("resetUser")
     } catch (error) {
-      return {
-        success: false
+      throw new Error(error.message)
+    }
+  },
+
+  updateUser: async ({ commit }, user) => {
+    try {
+      const response = await putRequest(`${BACKEND_URL}/user`, user, store.state.userToken)
+
+      if (!response.authorized) {
+        commit("reset")
+        throw new Error("Unauthorized")
       }
+
+    } catch (error) {
+      throw new Error(error.message)
+    }
+  },
+
+  updateSurgery: async ({ commit }, surgery) => {
+    try {
+      const response = await putRequest(`${BACKEND_URL}/surgery`, surgery, store.state.userToken)
+
+      if (!response.authorized) {
+        commit("reset")
+        throw new Error("Unauthorized")
+      }
+
+    } catch (error) { 
+      throw new Error(error.message)
+    }
+  },
+
+  createAppointment: async ({ commit }, appointment) => {
+    try {
+      const response = await postRequest(`${BACKEND_URL}/appointment`, appointment, store.state.userToken) 
+
+      if (!response.authorized) {
+        commit("reset")
+        throw new Error("Unauthorized")
+      }
+
+    } catch (error) {
+      throw new Error(error.message)
+    }
+  },
+
+  getAppointments: async ({ commit }, userId) => {
+    try {
+      const response = await getRequest(`${BACKEND_URL}/appointment/${userId}`, store.state.userToken)
+      if (!response.authorized) {
+        commit("reset")
+        throw new Error("Unauthorized")
+      }
+
+      return response.data.data
+    } catch (error) {
+      throw new Error(error.message)
+    }
+  },
+
+  deleteAppointment: async ({ commit }, appointmentId) => {
+    try {
+      const response = await deleteRequest(`${BACKEND_URL}/appointment/${appointmentId}`, store.state.userToken)
+
+      if (!response.authorized) {
+        commit("reset")
+        throw new Error("Unauthorized")
+      }
+
+    } catch (error) {
+      throw new Error(error.message)
     }
   }
 }

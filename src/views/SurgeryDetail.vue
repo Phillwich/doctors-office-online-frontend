@@ -1,18 +1,18 @@
 <template>
   <v-container fluid>
     <v-row justify="center">
-      <v-col cols="12" xl="6" lg="4" md="4">
+      <v-col cols="12" xl="8" lg="8" md="6">
         <v-card>
           <v-card-title>{{surgery.name}}</v-card-title>
           <v-card-text>
             <v-row justify="center" align="center">
               <v-col>
-                <v-textarea outlined disabled v-model="surgery.description"></v-textarea>
+                <v-textarea outlined readonly v-model="surgery.description"></v-textarea>
               </v-col>
               <v-col>
-                <v-text-field outlined disabled :value="formatCity(surgery)"></v-text-field>
-                <v-text-field outlined disabled v-model="surgery.phone"></v-text-field>
-                <v-text-field outlined disabled v-model="surgery.email"></v-text-field>
+                <v-text-field outlined readonly :value="formatCity(surgery)"></v-text-field>
+                <v-text-field outlined readonly v-model="surgery.phone"></v-text-field>
+                <v-text-field outlined readonly v-model="surgery.email"></v-text-field>
               </v-col>
             </v-row>
           </v-card-text>
@@ -20,8 +20,8 @@
       </v-col>
     </v-row>
     <v-row justify="center">
-      <v-col cols="12" xl="6">
-
+      <v-col cols="12" xl="8" lg="8" md="6">
+        <Calendar />
       </v-col>
     </v-row>
   </v-container>
@@ -29,7 +29,13 @@
 
 <script>
 import { mapActions } from "vuex";
+
+import Calendar from "../components/Surgery/Calendar"
+
 export default {
+  components: {
+    Calendar
+  },
   data() {
     return {
       surgery: {}
@@ -37,11 +43,13 @@ export default {
   },
   async mounted() {
     const surgeryId = this.$route.params.id;
-    const response = await this.getSurgeryInformation(surgeryId);
 
-    if (!response.success) return this.$router.push("/login");
-
-    this.surgery = response.data;
+    try {
+      const response = await this.getSurgeryInformation(surgeryId);
+      this.surgery = response;
+    } catch (error) {
+      this.$router.push("/login");
+    }
   },
   methods: {
     ...mapActions(["getSurgeryInformation"]),
