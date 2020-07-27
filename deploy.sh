@@ -20,6 +20,7 @@ git add -A
 git commit -m ':deploy:'
 
 # deploy
-git push -f git@github.com:Phillwich/doctors-office-online-frontend.git gh-pages
+git checkout gh-pages
+git push 
 
 cd -
